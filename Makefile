@@ -2,5 +2,5 @@ CC = clang++
 OUTFILE = bin/ccis-hack
 
 all:
-	$(CC) -g src/*.cpp -o $(OUTFILE)
+	$(CC) -Wall -g src/*.cpp -lncurses -o $(OUTFILE)
 
