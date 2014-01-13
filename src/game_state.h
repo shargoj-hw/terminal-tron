@@ -11,7 +11,7 @@ namespace CH {
 #define WALL_CHARACTER ('X')
 
   enum color {
-    RED, YELLOW, GREEN, BLUE, PURPLE, ORANGE
+    RED, YELLOW, GREEN, BLUE, WALL
   };
 
   enum direction {

@@ -7,27 +7,39 @@
 extern bool g_curses_on;
 
 namespace CH {
-
+  
+  void draw_game_object(const game_object go) {
+    move(go.position.y, go.position.x);
+    attron(COLOR_PAIR(go.col));
+    addch(go.graphic);
+  }
+  
   void renderer::render(const game_state gs) {
     if (!g_curses_on) {
       throw std::runtime_error("ncurses not initialized");
     }
 
     clear();
-    
-    for (auto tail_iter = gs.tails.begin(); tail_iter != gs.tails.end(); tail_iter++) {
-      tail t = tail_iter->second;
-      move(t.position.y, t.position.x);
-      addch(t.graphic);
+
+    attron(COLOR_PAIR(WALL));
+    for(int x = 0; x < gs.width; x++) {
+      move(0, x); addch('#');
+      move(gs.height-1, x); addch('#');
     }
 
-    for (auto player_iter = gs.players.begin(); player_iter != gs.players.end(); player_iter++) {
-      player p = *player_iter;
-      move(p.position.y, p.position.x);
-      addch(p.graphic);
+    for(int y = 0; y < gs.height; y++) {
+      move(y, 0); addch('#');
+      move(y, gs.width-1); addch('#');
+    }
+    
+    for (auto& pos_to_tail: gs.tails) {
+      draw_game_object(pos_to_tail.second);
+    }
+
+    for (auto& player: gs.players) {
+      draw_game_object(player);
     }
 
     refresh();
   }
-
 }

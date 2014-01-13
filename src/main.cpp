@@ -9,6 +9,14 @@ bool g_curses_on = false;
 /* Initialize ncurses  */
 void init_ncurses() {
   initscr();
+  start_color();
+
+  init_pair(RED, COLOR_RED, COLOR_BLACK);
+  init_pair(YELLOW, COLOR_YELLOW, COLOR_BLACK);
+  init_pair(GREEN, COLOR_GREEN, COLOR_BLACK);
+  init_pair(BLUE, COLOR_BLUE, COLOR_BLACK);
+  init_pair(WALL, COLOR_BLACK, COLOR_WHITE);
+
   noecho();
   curs_set(0);
 
@@ -26,17 +34,17 @@ void shutdown_ncurses() {
 #include <list>
 int main(int argc, char** argv) {
   init_ncurses();
-
-  player player1 = player("p1", 'y', RED, pos(COLS/2, LINES/2), RIGHT);
+  
+  player player1 = player("p1", 'y', BLUE, pos(COLS/2, LINES/2), RIGHT);
   
   std::list<player> players;
   players.push_front(player1);
-  
 
   game_state gs(COLS, LINES, players);
   renderer renderer;
 
-  char c;
+  char c = 's';
+
   std::map<player_id, direction> player_moves;
   while (c != 'q') {
     player_moves.clear();
