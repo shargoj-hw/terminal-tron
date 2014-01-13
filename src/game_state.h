@@ -51,7 +51,8 @@ namespace CH {
     tail(player p) : game_object(WALL_CHARACTER, p.col, p.position), laid_by(p.id) { }
   };
 
-  struct game_state {
+  class game_state {
+  public:
     const unsigned int width, height;
     std::map<pos, tail> tails; // map to support fast lookups
     std::list<player> players;
