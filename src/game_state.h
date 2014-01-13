@@ -8,7 +8,7 @@
 
 namespace CH {
 
-#define WALL_CHARACTER ('X')
+#define WALL_CHARACTER ('#')
 
   enum color {
     RED, YELLOW, GREEN, BLUE, WALL
@@ -36,10 +36,13 @@ namespace CH {
     const player_id id;
 
     direction dir;
+
+    bool alive;
+    
     unsigned int score;
 
     player(std::string name, char graphic, color col, pos initial_pos, direction initial_dir)
-      : game_object(graphic, col, initial_pos), name(name), id(g_ids++), dir(initial_dir) { }
+      : game_object(graphic, col, initial_pos), name(name), id(g_ids++), dir(initial_dir), alive(true) { }
   };
 
   struct tail : game_object { 
@@ -63,6 +66,7 @@ namespace CH {
     void update_player_directions(const std::map<player_id, direction> player_moves);
     void add_tails();
     void move_players_forward();
+    void check_collisions_and_update_scores();
   };
   
 }
