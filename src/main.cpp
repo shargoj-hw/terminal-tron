@@ -92,20 +92,32 @@ int main(int argc, char** argv) {
     c = getch();
     
     switch (c) {
-    case 'h':
-      player_moves.insert(std::pair<player_id, direction>(player1.id, LEFT));
-      break;
-    case 'j':
-      player_moves.insert(std::pair<player_id, direction>(player1.id, DOWN));
-      break;
-    case 'k':
+    case 'w':
       player_moves.insert(std::pair<player_id, direction>(player1.id, UP));
       break;
-    case 'l':
+    case 's':
+      player_moves.insert(std::pair<player_id, direction>(player1.id, DOWN));
+      break;
+    case 'a':
+      player_moves.insert(std::pair<player_id, direction>(player1.id, LEFT));
+      break;
+    case 'd':
       player_moves.insert(std::pair<player_id, direction>(player1.id, RIGHT));
       break;
+    case 'i':
+      player_moves.insert(std::pair<player_id, direction>(player2.id, UP));
+      break;
+    case 'k':
+      player_moves.insert(std::pair<player_id, direction>(player2.id, DOWN));
+      break;
+    case 'j':
+      player_moves.insert(std::pair<player_id, direction>(player2.id, LEFT));
+      break;
+    case 'l':
+      player_moves.insert(std::pair<player_id, direction>(player2.id, RIGHT));
+      break;
     }
-        
+
     gs.update(player_moves);
     renderer.render(gs);
   }
