@@ -6,6 +6,41 @@ using namespace CH;
 
 bool g_curses_on = false; 
 
+#include <string>
+// figlet -f isometric3 JIMS TRON
+std::string JIM_TRON_LOGO[] = 
+  { "    ___                      ___           ___          ",
+    "   /  /\\       ___          /__/\\         /  /\\         ",
+    "  /  /:/      /  /\\        |  |::\\       /  /:/_        ",
+    " /__/::\\     /  /:/        |  |:|:\\     /  /:/ /\\       ",
+    " \\__\\/\\:\\   /__/::\\      __|__|:|\\:\\   /  /:/ /::\\      ",
+    "    \\  \\:\\  \\__\\/\\:\\__  /__/::::| \\:\\ /__/:/ /:/\\:\\     ",
+    "     \\__\\:\\    \\  \\:\\/\\ \\  \\:\\~~\\__\\/ \\  \\:\\/:/~/:/     ",
+    "     /  /:/     \\__\\::/  \\  \\:\\        \\  \\::/ /:/      ",
+    "    /__/:/      /__/:/    \\  \\:\\        \\__\\/ /:/       ",
+    "    \\__\\/       \\__\\/      \\  \\:\\         /__/:/        ",
+    "                            \\__\\/         \\__\\/         ",
+    "                  ___           ___           ___       ",
+    "      ___        /  /\\         /  /\\         /__/\\      ",
+    "     /  /\\      /  /::\\       /  /::\\        \\  \\:\\     ",
+    "    /  /:/     /  /:/\\:\\     /  /:/\\:\\        \\  \\:\\    ",
+    "   /  /:/     /  /:/~/:/    /  /:/  \\:\\   _____\\__\\:\\   ",
+    "  /  /::\\    /__/:/ /:/___ /__/:/ \\__\\:\\ /__/::::::::\\  ",
+    " /__/:/\\:\\   \\  \\:\\/:::::/ \\  \\:\\ /  /:/ \\  \\:\\~~\\~~\\/  ",
+    " \\__\\/  \\:\\   \\  \\::/~~~~   \\  \\:\\  /:/   \\  \\:\\  ~~~   ",
+    "      \\  \\:\\   \\  \\:\\        \\  \\:\\/:/     \\  \\:\\       ",
+    "       \\__\\/    \\  \\:\\        \\  \\::/       \\  \\:\\      ",
+    "                 \\__\\/         \\__\\/         \\__\\/      ",
+    "              --Press any key to continue--             "
+  };
+
+void display_logo(unsigned int start_x, unsigned int start_y) {
+  for (std::string& logo_line: JIM_TRON_LOGO) {
+    move(start_y++, start_x);
+    printw(logo_line.c_str());
+  }
+}
+
 /* Initialize ncurses  */
 void init_ncurses() {
   initscr();
@@ -20,8 +55,6 @@ void init_ncurses() {
   noecho();
   curs_set(0);
 
-  timeout(100);
-  
   g_curses_on = true;
 }
 
@@ -31,19 +64,27 @@ void shutdown_ncurses() {
   g_curses_on = false;
 }
 
+#include <iostream>
 #include <list>
 int main(int argc, char** argv) {
   init_ncurses();
   
-  player player1 = player("p1", 'y', BLUE, pos(COLS/2, LINES/2), RIGHT);
-  
+  display_logo(COLS/2 - JIM_TRON_LOGO[0].length() / 2, LINES/8);
+  getch();
+
+  player player1 = player("p1", 'X', BLUE, pos(COLS/4, LINES/2), RIGHT);
+  player player2 = player("p2", 'O', RED, pos(3*COLS/4, LINES/2), LEFT);
+
   std::list<player> players;
   players.push_front(player1);
+  players.push_front(player2);
 
   game_state gs(COLS, LINES, players);
   renderer renderer;
 
-  char c = 's';
+  int c = 's';
+
+  timeout(100);
 
   std::map<player_id, direction> player_moves;
   while (c != 'q') {
