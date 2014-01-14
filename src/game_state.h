@@ -84,8 +84,7 @@ namespace CH {
     virtual char get_graphic() const { return WALL_CHARACTER; }    
   };
 
-  class game_state {
-  public:
+  struct game_state {
     const unsigned int width, height;
     std::map<pos, tail> tails; // map to support fast lookups
     std::list<player> players;
