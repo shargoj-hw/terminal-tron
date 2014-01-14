@@ -1,6 +1,7 @@
 #ifndef _GAMESTATE_H_
 #define _GAMESTATE_H_
 
+#include <stdexcept>
 #include <list>
 #include <string>
 #include <map>
@@ -18,37 +19,69 @@ namespace CH {
     UP, DOWN, LEFT, RIGHT
   };
 
-  struct game_object {
-    char graphic;
-    color col;
-    pos position;
-
-    game_object(char graphic, color col, pos position) : 
-      graphic(graphic), col(col), position(position) { }
+  class game_object {
+  public:
+    virtual char get_graphic() const = 0;
+    virtual color get_color() const = 0;
+    virtual pos get_position() const = 0;
   };
 
   typedef unsigned int player_id;
   
   static player_id g_ids = 0;
 
-  struct player : game_object {
+  class player : public game_object {
     const std::string name;
+    const color col;
     const player_id id;
-
+    pos position;
     direction dir;
-
     bool alive;
-    
     unsigned int score;
 
-    player(std::string name, char graphic, color col, pos initial_pos, direction initial_dir)
-      : game_object(graphic, col, initial_pos), name(name), id(g_ids++), dir(initial_dir), alive(true) { }
+  public:
+    player(std::string name, color col, pos initial_pos, direction initial_dir)
+      : name(name), col(col), id(g_ids++), position(initial_pos), dir(initial_dir), alive(true) { }
+
+    virtual color get_color() const { return col; }
+    virtual pos get_position() const { return position; } 
+    virtual char get_graphic() const {
+      switch(dir) {
+      case UP:
+	return '^';
+      case DOWN:
+	return 'v';
+      case LEFT:
+	return '<';
+      case RIGHT:
+	return '>';
+      default:
+	throw std::runtime_error("bad direction");
+      }
+    }
+
+    player_id get_id() const { return id; }
+    direction get_direction() const { return dir; }
+    bool is_alive() const { return alive; }
+    unsigned int get_score() const { return score; }
+
+    void update_position(pos p) { position = p; }
+    void update_direction(direction d) { dir = d; }
+    void kill() { alive = false; }
+    void add_to_score(unsigned int points) { score += points; }
   };
 
-  struct tail : game_object { 
-    player_id laid_by;
+  class tail : public game_object { 
+    const color col;
+    const pos position;
 
-    tail(player p) : game_object(WALL_CHARACTER, p.col, p.position), laid_by(p.id) { }
+  public:
+    const player_id laid_by;
+    tail(player p) : col(p.get_color()), position(p.get_position()), laid_by(p.get_id()) { }
+
+    virtual color get_color() const { return col; }
+    virtual pos get_position() const { return position; } 
+    virtual char get_graphic() const { return WALL_CHARACTER; }    
   };
 
   class game_state {

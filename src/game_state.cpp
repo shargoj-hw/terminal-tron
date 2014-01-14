@@ -5,12 +5,12 @@
 
 namespace CH {
 
-game_state::game_state(unsigned int width, unsigned int height, std::list<player> players)
-  : width(width), height(height), players(players) { }
+  game_state::game_state(unsigned int width, unsigned int height, std::list<player> players)
+    : width(width), height(height), players(players) { }
 
   player& game_state::player_by_id(player_id id) {
     for (auto& p: players) {
-      if (p.id == id) return p;
+      if (p.get_id() == id) return p;
     }
     
     throw std::runtime_error("no player found");
@@ -25,34 +25,34 @@ game_state::game_state(unsigned int width, unsigned int height, std::list<player
 
   void game_state::update_player_directions(const std::map<player_id, direction> new_player_directions) {
     for (auto& player_to_direction:  new_player_directions) {
-      if (!player_by_id(player_to_direction.first).alive) continue;
-      player_by_id(player_to_direction.first).dir = player_to_direction.second;
+      if (!player_by_id(player_to_direction.first).is_alive()) continue;
+      player_by_id(player_to_direction.first).update_direction(player_to_direction.second);
     }    
   }
 
   void game_state::add_tails() {
     for (auto& p: players) {
-      if (!p.alive) continue;
-      tails.insert(std::pair<pos, tail>(p.position, tail(p)));
+      if (!p.is_alive()) continue;
+      tails.insert(std::pair<pos, tail>(p.get_position(), tail(p)));
     }
   }
 
   void game_state::move_players_forward() {
     for (auto& p: players) {
-      if (!p.alive) continue;
+      if (!p.is_alive()) continue;
 
-      switch (p.dir) {
+      switch (p.get_direction()) {
       case UP:
-	p.position = pos(p.position.x, p.position.y - 1);
+	p.update_position(pos(p.get_position().x, p.get_position().y - 1));
 	break;
       case DOWN:
-	p.position = pos(p.position.x, p.position.y + 1);
+	p.update_position(pos(p.get_position().x, p.get_position().y + 1));
 	break;
       case LEFT:
-	p.position = pos(p.position.x - 1, p.position.y);
+	p.update_position(pos(p.get_position().x - 1, p.get_position().y));
 	break;
       case RIGHT:
-	p.position = pos(p.position.x + 1, p.position.y);
+	p.update_position(pos(p.get_position().x + 1, p.get_position().y));
 	break;
       }
     }
@@ -60,19 +60,19 @@ game_state::game_state(unsigned int width, unsigned int height, std::list<player
 
   void game_state::check_collisions_and_update_scores() {
     for (auto& p: players) {
-      if (!p.alive) continue;
+      if (!p.is_alive()) continue;
 
-      auto tail_iter = tails.find(p.position);
+      auto tail_iter = tails.find(p.get_position());
       if (tail_iter != tails.end()) {
-	p.alive = false;
-	if (tail_iter->second.laid_by != p.id)
-	  player_by_id(tail_iter->second.laid_by).score += 100;
+	p.kill();
+	if (tail_iter->second.laid_by != p.get_id())
+	  player_by_id(tail_iter->second.laid_by).add_to_score(100);
       }
 
       for (auto& p2 : players) {
-	if (p.id != p2.id && p.position == p2.position) {
-	  p.alive = false;
-	  p2.alive = false;
+	if (p.get_id() != p2.get_id() && p.get_position() == p2.get_position()) {
+	  p.kill();
+	  p2.kill();
 	}
       }
     }

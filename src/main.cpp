@@ -72,8 +72,8 @@ int main(int argc, char** argv) {
   display_logo(COLS/2 - JIM_TRON_LOGO[0].length() / 2, LINES/8);
   getch();
 
-  player player1 = player("p1", 'X', BLUE, pos(COLS/4, LINES/2), RIGHT);
-  player player2 = player("p2", 'O', RED, pos(3*COLS/4, LINES/2), LEFT);
+  player player1 = player("p1", BLUE, pos(COLS/4, LINES/2), RIGHT);
+  player player2 = player("p2", RED, pos(3*COLS/4, LINES/2), LEFT);
 
   std::list<player> players;
   players.push_front(player1);
@@ -93,28 +93,28 @@ int main(int argc, char** argv) {
     
     switch (c) {
     case 'w':
-      player_moves.insert(std::pair<player_id, direction>(player1.id, UP));
+      player_moves.insert(std::pair<player_id, direction>(player1.get_id(), UP));
       break;
     case 's':
-      player_moves.insert(std::pair<player_id, direction>(player1.id, DOWN));
+      player_moves.insert(std::pair<player_id, direction>(player1.get_id(), DOWN));
       break;
     case 'a':
-      player_moves.insert(std::pair<player_id, direction>(player1.id, LEFT));
+      player_moves.insert(std::pair<player_id, direction>(player1.get_id(), LEFT));
       break;
     case 'd':
-      player_moves.insert(std::pair<player_id, direction>(player1.id, RIGHT));
+      player_moves.insert(std::pair<player_id, direction>(player1.get_id(), RIGHT));
       break;
     case 'i':
-      player_moves.insert(std::pair<player_id, direction>(player2.id, UP));
+      player_moves.insert(std::pair<player_id, direction>(player2.get_id(), UP));
       break;
     case 'k':
-      player_moves.insert(std::pair<player_id, direction>(player2.id, DOWN));
+      player_moves.insert(std::pair<player_id, direction>(player2.get_id(), DOWN));
       break;
     case 'j':
-      player_moves.insert(std::pair<player_id, direction>(player2.id, LEFT));
+      player_moves.insert(std::pair<player_id, direction>(player2.get_id(), LEFT));
       break;
     case 'l':
-      player_moves.insert(std::pair<player_id, direction>(player2.id, RIGHT));
+      player_moves.insert(std::pair<player_id, direction>(player2.get_id(), RIGHT));
       break;
     }
 

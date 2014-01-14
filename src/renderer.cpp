@@ -8,10 +8,10 @@ extern bool g_curses_on;
 
 namespace CH {
   
-  void draw_game_object(const game_object go) {
-    move(go.position.y, go.position.x);
-    attron(COLOR_PAIR(go.col));
-    addch(go.graphic);
+  void draw_game_object(const game_object &go) {
+    move(go.get_position().y, go.get_position().x);
+    attron(COLOR_PAIR(go.get_color()));
+    addch(go.get_graphic());
   }
   
   void renderer::render(const game_state gs) {
