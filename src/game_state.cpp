@@ -62,6 +62,15 @@ namespace CH {
     for (auto& p: players) {
       if (!p.is_alive()) continue;
 
+      pos ppos = p.get_position();
+      if (ppos.x <= 0
+	  || ppos.x >= width - 1
+	  || ppos.y <= 0
+	  || ppos.y >= height - 1) {
+	p.kill();
+	return;
+      }
+
       auto tail_iter = tails.find(p.get_position());
       if (tail_iter != tails.end()) {
 	p.kill();
