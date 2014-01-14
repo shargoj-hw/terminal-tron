@@ -73,7 +73,7 @@ int main(int argc, char** argv) {
   getch();
 
   player player1 = player("p1", BLUE, pos(COLS/4, LINES/2), RIGHT);
-  player player2 = player("p2", RED, pos(3*COLS/4, LINES/2), LEFT);
+  player player2 = player("p2", GREEN, pos(3*COLS/4, LINES/2), LEFT);
 
   std::list<player> players;
   players.push_front(player1);
