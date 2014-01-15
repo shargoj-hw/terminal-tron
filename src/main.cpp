@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <ncurses.h>
 #include "renderer.h"
 #include "pos.h"
@@ -31,6 +32,8 @@ void display_logo(unsigned int start_x, unsigned int start_y) {
   }
 }
 
+void shutdown_ncurses();
+
 /* Initialize ncurses  */
 void init_ncurses() {
   initscr();
@@ -46,6 +49,8 @@ void init_ncurses() {
   curs_set(0);
 
   g_curses_on = true;
+
+  atexit(shutdown_ncurses);
 }
 
 void shutdown_ncurses() {
@@ -112,6 +117,5 @@ int main(int argc, char** argv) {
     renderer.render(gs);
   }
 
-  shutdown_ncurses();
   return 0;
 }
