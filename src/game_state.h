@@ -93,6 +93,8 @@ namespace CH {
 
     void update(const std::map<player_id, direction> player_moves);
 
+    bool is_game_over();
+
   private:
     player& player_by_id(player_id id);
 

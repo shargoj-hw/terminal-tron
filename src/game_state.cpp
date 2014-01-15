@@ -62,6 +62,7 @@ namespace CH {
     for (auto& p: players) {
       if (!p.is_alive()) continue;
 
+      // Check the bounds of the map
       pos ppos = p.get_position();
       if (ppos.x <= 0
 	  || ppos.x >= width - 1
@@ -71,6 +72,7 @@ namespace CH {
 	return;
       }
 
+      // Check collisions with tails.
       auto tail_iter = tails.find(p.get_position());
       if (tail_iter != tails.end()) {
 	p.kill();
@@ -78,6 +80,7 @@ namespace CH {
 	  player_by_id(tail_iter->second.laid_by).add_to_score(100);
       }
 
+      // Check that players haven't hit each other.
       for (auto& p2 : players) {
 	if (p.get_id() != p2.get_id() && p.get_position() == p2.get_position()) {
 	  p.kill();
@@ -86,4 +89,13 @@ namespace CH {
       }
     }
   }
+
+  bool game_state::is_game_over() {
+    int num_alive = 0;
+    
+    for (auto& p: players) 
+      if (p.is_alive()) num_alive++;
+    
+    return num_alive <= 1;
+ }
 }

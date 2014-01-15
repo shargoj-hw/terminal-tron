@@ -1,3 +1,5 @@
+#include <iostream>
+#include <list>
 #include <cstdlib>
 #include <ncurses.h>
 #include "renderer.h"
@@ -59,8 +61,6 @@ void shutdown_ncurses() {
   g_curses_on = false;
 }
 
-#include <iostream>
-#include <list>
 int main(int argc, char** argv) {
   init_ncurses();
   
@@ -82,7 +82,7 @@ int main(int argc, char** argv) {
   timeout(100);
 
   std::map<player_id, direction> player_moves;
-  while (c != 'q') {
+  while (c != 'Q' && !gs.is_game_over()) {
     player_moves.clear();
     c = getch();
     
