@@ -2,6 +2,7 @@
 #define _GAMESTATE_H_
 
 #include <stdexcept>
+#include <random>
 #include <list>
 #include <string>
 #include <map>
@@ -95,8 +96,9 @@ namespace CH {
 
     bool is_game_over();
 
+    player player_by_id(player_id id) const; 
   private:
-    player& player_by_id(player_id id);
+    player& player_ref_by_id(player_id id);
 
     void update_player_directions(const std::map<player_id, direction> player_moves);
     void add_tails();
@@ -104,6 +106,45 @@ namespace CH {
     void check_collisions_and_update_scores();
   };
   
+  class ai_player {
+    const player_id id;
+
+  public:
+    ai_player(player_id id) : id(id) { };
+
+    player_id get_player_id() const { return id; }
+
+    virtual direction next_move(const game_state gs) = 0;
+  };
+
+  class random_ai_player : public ai_player {
+    std::mt19937 gen;
+
+  public:
+    random_ai_player(player_id id) : ai_player(id) { }
+
+    virtual direction next_move(const game_state gs) {
+      player me = gs.player_by_id(get_player_id());
+      
+      float rand = std::generate_canonical<float, 32>(gen);
+
+      if (rand < .30) {
+	return me.get_direction();
+      }
+      
+      rand = std::generate_canonical<float, 32>(gen);
+
+      if (rand < .25) {
+	return LEFT;
+      } else if (rand < .50) {
+	return RIGHT;
+      } else if (rand < .75) {
+	return UP;
+      } else {
+	return DOWN;
+      }
+    }
+  };
 }
 
 #endif /* _GAMESTATE_H_ */

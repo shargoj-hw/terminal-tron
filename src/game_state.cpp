@@ -8,7 +8,15 @@ namespace CH {
   game_state::game_state(unsigned int width, unsigned int height, std::list<player> players)
     : width(width), height(height), players(players) { }
 
-  player& game_state::player_by_id(player_id id) {
+  player game_state::player_by_id(player_id id) const {
+    for (auto& p: players) {
+      if (p.get_id() == id) return p;
+    }
+
+    throw std::runtime_error("no player found");
+  }
+
+  player& game_state::player_ref_by_id(player_id id) {
     for (auto& p: players) {
       if (p.get_id() == id) return p;
     }
@@ -25,8 +33,8 @@ namespace CH {
 
   void game_state::update_player_directions(const std::map<player_id, direction> new_player_directions) {
     for (auto& player_to_direction:  new_player_directions) {
-      if (!player_by_id(player_to_direction.first).is_alive()) continue;
-      player_by_id(player_to_direction.first).update_direction(player_to_direction.second);
+      if (!player_ref_by_id(player_to_direction.first).is_alive()) continue;
+      player_ref_by_id(player_to_direction.first).update_direction(player_to_direction.second);
     }    
   }
 
@@ -77,7 +85,7 @@ namespace CH {
       if (tail_iter != tails.end()) {
 	p.kill();
 	if (tail_iter->second.laid_by != p.get_id())
-	  player_by_id(tail_iter->second.laid_by).add_to_score(100);
+	  player_ref_by_id(tail_iter->second.laid_by).add_to_score(100);
       }
 
       // Check that players haven't hit each other.

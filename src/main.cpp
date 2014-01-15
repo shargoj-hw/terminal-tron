@@ -69,6 +69,8 @@ int main(int argc, char** argv) {
 
   player player1 = player("p1", BLUE, pos(COLS/4, LINES/2), RIGHT);
   player player2 = player("p2", GREEN, pos(3*COLS/4, LINES/2), LEFT);
+  
+  random_ai_player ai(player2.get_id());
 
   std::list<player> players;
   players.push_front(player1);
@@ -99,7 +101,8 @@ int main(int argc, char** argv) {
     case 'd':
       player_moves.insert(std::pair<player_id, direction>(player1.get_id(), RIGHT));
       break;
-    case 'i':
+      /* TODO: uncomment these when I add 2 player back in.
+	case 'i':
       player_moves.insert(std::pair<player_id, direction>(player2.get_id(), UP));
       break;
     case 'k':
@@ -111,7 +114,10 @@ int main(int argc, char** argv) {
     case 'l':
       player_moves.insert(std::pair<player_id, direction>(player2.get_id(), RIGHT));
       break;
+      */
     }
+
+    player_moves.insert(std::pair<player_id, direction>(player2.get_id(), ai.next_move(gs)));
 
     gs.update(player_moves);
     renderer.render(gs);
