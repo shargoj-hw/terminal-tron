@@ -13,6 +13,7 @@ namespace CH {
     : name(name), col(col), id(g_ids++), position(initial_pos), dir(initial_dir), alive(true) { }
 
   color player::get_color() const { return col; }
+  std::string player::get_name() const { return name; }
   pos player::get_position() const { return position; } 
   char player::get_graphic() const {
     switch(dir) {

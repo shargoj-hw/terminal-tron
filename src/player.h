@@ -28,6 +28,7 @@ namespace CH {
     virtual char get_graphic() const;
 
     player_id get_id() const;
+    std::string get_name() const;
     direction get_direction() const;
     bool is_alive() const;
     unsigned int get_score() const;

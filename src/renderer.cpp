@@ -40,6 +40,14 @@ namespace CH {
       draw_game_object(player);
     }
 
+    int score_y = gs.height/8;
+    int score_x = gs.width/8;
+    attron(COLOR_PAIR(WALL));
+    for (auto& player: gs.players) {
+      move(score_y++, score_x);
+      printw("Player %s: %d", player.get_name().c_str(), player.get_score());
+    }
+
     refresh();
   }
 }

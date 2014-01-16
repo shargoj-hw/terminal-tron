@@ -98,6 +98,9 @@ namespace CH {
 	  p2.kill();
 	}
       }
+
+      // Add to score if the player's still alive!
+      if (p.is_alive()) p.add_to_score(10);
     }
   }
 
