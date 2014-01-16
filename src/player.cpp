@@ -11,7 +11,7 @@ namespace CH {
   static player_id g_ids = 0;
 
   player::player(std::string name, color col, pos initial_pos, direction initial_dir)
-    : name(name), col(col), id(g_ids++), position(initial_pos), dir(initial_dir), alive(true) { }
+    : name(name), col(col), id(g_ids++), position(initial_pos), dir(initial_dir), alive(true), score(0) { }
 
   color player::get_color() const { return col; }
   std::string player::get_name() const { return name; }
