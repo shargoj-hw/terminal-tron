@@ -4,6 +4,8 @@
 #include <ncurses.h>
 #include "renderer.h"
 #include "pos.h"
+#include "game_state.h"
+#include "ai_player.h"
 
 using namespace CH;
 
