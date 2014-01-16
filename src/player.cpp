@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <string>
 #include "color.h"
 #include "direction.h"
